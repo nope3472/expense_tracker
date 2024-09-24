@@ -13,6 +13,10 @@ This is a **personal expense tracking application** built with **Flutter**. It h
 - **Responsive UI**: The app is optimized for different screen sizes and provides a smooth user experience.
 
 ## Screenshots
+<img src="https://github.com/user-attachments/assets/ac8c6b39-619d-47d7-9c8f-a9c871675d63" width="200" />
+<img src="https://github.com/user-attachments/assets/bbcaafd3-ccc9-4504-8e4c-ab2046f021e5" width="200" />
+<img src="https://github.com/user-attachments/assets/5b8dafbb-7a88-43ef-90f8-acbef6c7f15a" width="200" />
+<img src="https://github.com/user-attachments/assets/b7cb5a5c-00e9-40b3-bae1-1dc266d191af" width="200" />
 
 
 
