@@ -1,18 +1,30 @@
-allprojects {
+buildscript {
     repositories {
-        google()
-        mavenCentral()
+        google() // Google's Maven repository
+        mavenCentral() // Central repository for dependencies
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:8.1.2' // Update to the latest Android Gradle plugin version
+        classpath 'com.google.gms:google-services:4.3.15' // Google Services plugin for Firebase, latest version
+        // Add other classpaths here if required, such as for Kotlin or other tools
+        // classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.9.10" 
     }
 }
 
-rootProject.buildDir = "../build"
-subprojects {
-    project.buildDir = "${rootProject.buildDir}/${project.name}"
+allprojects {
+    repositories {
+        google() // Google's Maven repository for dependencies
+        mavenCentral() // Central repository for other libraries
+    }
 }
+
+rootProject.buildDir = "../build" // Consolidate build output to a common directory
+
 subprojects {
-    project.evaluationDependsOn(":app")
+    project.buildDir = "${rootProject.buildDir}/${project.name}" // Set up build directory for subprojects
+    project.evaluationDependsOn(":app") // Ensure the app project is evaluated first
 }
 
 tasks.register("clean", Delete) {
-    delete rootProject.buildDir
+    delete rootProject.buildDir // Clean task to delete the build directory
 }

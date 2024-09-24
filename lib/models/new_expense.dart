@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'expense_structure.dart';
+import 'expense_structure.dart'; // Expenses class with Firebase functionality
 
 class NewExpense extends StatefulWidget {
-  final void Function(Expenses expense) onAddExpense; // Define the parameter
+  final void Function(Expenses expense) onAddExpense; // Callback function
 
-  const NewExpense({super.key, required this.onAddExpense}); // Initialize in constructor
+  const NewExpense({super.key, required this.onAddExpense});
 
   @override
   State<NewExpense> createState() {
@@ -19,6 +19,7 @@ class _NewExpenseState extends State<NewExpense> {
   DateTime? _selectedDate;
   Category? _selectedCategory;
 
+  // Method to show error dialog
   void _showErrorDialog(String message) {
     showDialog(
       context: context,
@@ -37,7 +38,9 @@ class _NewExpenseState extends State<NewExpense> {
     );
   }
 
-  void _submitExpense() {
+  // Submit expense method
+  Future<void> _submitExpense() async {
+    // Validate inputs
     if (_enteredTitle.isEmpty) {
       _showErrorDialog('Please enter a valid title.');
       return;
@@ -66,14 +69,22 @@ class _NewExpenseState extends State<NewExpense> {
       category: _selectedCategory!,
     );
 
-    widget.onAddExpense(newExpense); // Call the provided function
-    Navigator.of(context).pop(); // Close modal after submission
+    // Save the expense to Firebase (optional if using Firebase)
+    await newExpense.saveToFirebase(); // Comment this out if not needed
+
+    // Pass the new expense to the parent widget
+    widget.onAddExpense(newExpense);
+
+    // Close the modal after submission
+    Navigator.of(context).pop();
   }
 
+  // Cancel the modal
   void _cancelExpense() {
-    Navigator.of(context).pop(); // Close the modal when "Cancel" is pressed
+    Navigator.of(context).pop(); // Close modal when "Cancel" is pressed
   }
 
+  // Method to open date picker
   void _presentDatePicker() {
     showDatePicker(
       context: context,
