@@ -1,17 +1,33 @@
-# Expense Tracker App
+# Expense Tracker
 
-This is a **personal expense tracking application** built with **Flutter**. It helps users track their daily expenses, view expenses by categories, and visualize their spending habits using charts. The app is powered by **Firebase Firestore** for cloud storage of expenses.
+Expense Tracker is a Flutter-based mobile application designed to help users track their income and expenses. The app integrates with Firebase Firestore for real-time data storage, provides financial insights with dynamic charts, and allows users to manage custom categories with personalized icons.
 
-## Key Features
+## Features
 
-- **Add and Manage Expenses**: Easily add new expenses with categories, amounts, and dates.
-- **Real-Time Firestore Integration**: All expenses are stored in Firebase Firestore and can be retrieved, updated, and deleted in real-time.
-- **View Expenses by Category**: View the total expenditure by categories using visual charts like pie charts and bar graphs.
-- **Expense Summary**: Get a detailed breakdown of your expenses with a category-wise total.
-- **Dynamic Chart Visualization**: Easily visualize the distribution of expenses across different categories with a bar chart representation.
-- **Undo Delete Option**: When an expense is deleted, you can easily undo the deletion action with a single click.
-- **Responsive UI**: The app is optimized for different screen sizes and provides a smooth user experience.
+- **Expense & Income Tracking**  
+  Record and manage daily expenses and income easily.
 
+- **Category Management**  
+  - Predefined default categories (e.g., Food, Leisure, Work, Travel).  
+  - Create, edit, and delete custom categories with custom icons from your assets.
+
+- **Financial Overview Dashboard**  
+  - View total income, total expenses, and net balance for the current month.  
+  - Visualize spending per category using a horizontal scrollable bar graph.
+
+- **Offline Persistence**  
+  Firestore caches your data locally, ensuring your information is available even without an internet connection.
+
+- **Real-Time Updates**  
+  Changes synchronize automatically with Firebase for an always up-to-date view of your finances.
+
+## Tech Stack
+
+- **Flutter** – Cross-platform mobile development framework.
+- **Firebase Firestore** – Cloud-based real-time database.
+- **fl_chart** – Package for interactive and visually appealing charts.
+- **Dart** – Programming language used with Flutter.
+- 
 ## Screenshots
 <img src="https://github.com/user-attachments/assets/ac8c6b39-619d-47d7-9c8f-a9c871675d63" width="200" />
 <img src="https://github.com/user-attachments/assets/bbcaafd3-ccc9-4504-8e4c-ab2046f021e5" width="200" />
