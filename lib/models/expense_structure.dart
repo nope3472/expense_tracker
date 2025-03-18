@@ -5,21 +5,24 @@ import 'package:uuid/uuid.dart';
 final formatter = DateFormat.yMd();
 const uuid = Uuid();
 
-enum Category { food, leisure, work, travel }
-
-const CategoryIcons = {
-  Category.food: 'lib/assets/food.png',
-  Category.leisure: 'lib/assets/leisure.png',
-  Category.work: 'lib/assets/work.png',
-  Category.travel: 'lib/assets/travel.png',
+// Default categories and their icons (you can adjust the asset paths as needed)
+const List<String> defaultCategories = ['Food', 'Leisure', 'Work', 'Travel'];
+const Map<String, String> defaultCategoryIcons = {
+  'Food': 'lib/assets/food.png',
+  'Leisure': 'lib/assets/leisure.png',
+  'Work': 'lib/assets/work.png',
+  'Travel': 'lib/assets/travel.png',
 };
+
+enum TransactionType { income, expense }
 
 class Expenses {
   final String? id; // Nullable for new expenses
   final String title;
   final double amount;
   final DateTime date;
-  final Category category;
+  final String category; // Now a string
+  final TransactionType transactionType;
 
   Expenses({
     this.id,
@@ -27,43 +30,53 @@ class Expenses {
     required this.amount,
     required this.date,
     required this.category,
+    required this.transactionType,
   });
 
   // Convert an Expense object to a Firestore-friendly map
-  Map<String, dynamic> toFirestore() {
-    return {
-      'title': title,
-      'amount': amount,
-      'date': date.toIso8601String(),
-      'category': category.index,
-    };
-  }
+ Map<String, dynamic> toFirestore() {
+  return {
+    'title': title,
+    'amount': amount,
+    'date': Timestamp.fromDate(date), // Store as Firestore Timestamp
+    'category': category,
+    'transactionType': transactionType.index,
+  };
+}
 
-  String get formattedDate {
-    // Format the date to a readable string
-    return DateFormat.yMMMd().format(date); // Change the format as needed
-  }
+  String get formattedDate => DateFormat.yMMMd().format(date);
 
- Future<void> saveToFirebase() async {
+ Future<String> saveToFirebase() async {
+  try {
+    final collection = FirebaseFirestore.instance.collection('expenses');
+    final docRef = await collection.add(toFirestore());
+    return docRef.id; // Return the generated document ID
+  } catch (e) {
+    print('Error saving expense: $e');
+    rethrow;
+  }
+}
+
+  Future<void> updateInFirebase() async {
     try {
-      // Save to Firestore
-      final collection = FirebaseFirestore.instance.collection('expenses');
-      await collection.add(toFirestore()); // Automatically generates an ID
+      final docRef = FirebaseFirestore.instance.collection('expenses').doc(id);
+      await docRef.update(toFirestore());
     } catch (e) {
-      print('Error saving expense: $e');
+      print('Error updating expense: $e');
       rethrow;
     }
   }
 
-  // Factory constructor for creating an Expense object from Firestore
+  // Factory constructor to create an Expense from Firestore document
   factory Expenses.fromFirestore(DocumentSnapshot doc) {
-    Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
-    return Expenses(
-      id: doc.id,
-      title: data['title'],
-      amount: data['amount'],
-      date: DateTime.parse(data['date']),
-      category: Category.values[data['category']],
-    );
-  }
+  Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+  return Expenses(
+    id: doc.id,
+    title: data['title'],
+    amount: data['amount'],
+    date: (data['date'] as Timestamp).toDate(), // Convert Timestamp to DateTime
+    category: data['category'],
+    transactionType: TransactionType.values[data['transactionType']],
+  );
+}
 }
